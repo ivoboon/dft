@@ -1,6 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import random
+import seaborn as sns
 
 class Signal():
 	"""
@@ -23,6 +24,7 @@ class Signal():
 			self.time.append(n * self.duration / self.num_samples)
 		self.DFT_flag = False
 		self.IDFT_flag = False
+		sns.set_style("darkgrid")
 	
 
 	def add_signal(self, amp: float, freq: float, phase: float) -> None:
@@ -131,17 +133,30 @@ class Signal():
 		"""
 		Plots the samples of the original signal.
 		"""
-		plt.plot(self.time, self.samples)
+		sns.lineplot(x=self.time, y=self.samples)
+		plt.title("Time series plot of the original signal")
+		plt.xlabel("Time [s]")
+		plt.ylabel("Amplitude [-]")
 		plt.show()
 
 
-	def plot_freq(self) -> None:
+	def plot_DFT(self) -> None:
 		"""
 		This function will only run if the DFT flag has been set.
-		Plots the magnitudes of the different frequencies.
+		Plots the magnitude and phase of the different frequencies.
 		"""
 		if self.DFT_flag:
-			plt.plot(list(range(self.num_signals)), self.mag)
+			frequencies = list(range(self.num_signals))
+			fig, axes = plt.subplots(2, 1)
+			fig.suptitle("Magnitude and Phase plots of the DFT")
+			sns.lineplot(ax=axes[0], x=frequencies, y=self.mag)
+			axes[0].set_title("Magnitude")
+			axes[0].set_xlabel("Time [s]")
+			axes[0].set_ylabel("Magnitude [-]")
+			sns.lineplot(ax=axes[1], x=frequencies, y=self.phase)
+			axes[1].set_title("Phase")
+			axes[1].set_xlabel("Time [s]")
+			axes[1].set_ylabel("Phase [rad]")
 			plt.show()
 		else:
 			print('DFT not executed')
@@ -153,20 +168,27 @@ class Signal():
 		Plots the samples of the inverse Fourier transform.
 		"""
 		if self.IDFT_flag:
-			plt.plot(self.time, self.IDFT_samples)
+			sns.lineplot(x=self.time, y=self.IDFT_samples)
+			plt.title("Time series plot of the reconstructed signal")
+			plt.xlabel("Time [s]")
+			plt.ylabel("Amplitude [-]")
 			plt.show()
 		else:
 			print('IDFT not executed')
 
 
-	def plot_samples_IDFT_samples(self) -> None:
+	def plot_combined_samples(self) -> None:
 		"""
 		This function will only run if the IDFT flag has been set.
 		Plots a combination of the original samples and the samples of the inverse Fourier transform.
 		"""
 		if self.IDFT_flag:
-			plt.plot(self.time, self.samples)
-			plt.plot(self.time, self.IDFT_samples)
+			sns.lineplot(x=self.time, y=self.samples, label="Original")
+			sns.lineplot(x=self.time, y=self.IDFT_samples, label="Reconstructed")
+			plt.title("Time series plots of original and reconstructed signal")
+			plt.xlabel("Time [s]")
+			plt.ylabel("Amplitude [-]")
+			plt.legend()
 			plt.show()
 		else:
 			print('IDFT not executed')
