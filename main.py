@@ -1,9 +1,9 @@
-import dft
+import spectral
 
 def main():
 		# Initialised the Signal class
 		num_samples = 1000
-		signal = dft.Signal(num_samples, 1)
+		signal = spectral.Signal(num_samples, 1)
 
 		# Constructs a signal
 		signal.add_shift(1)
