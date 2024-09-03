@@ -16,7 +16,7 @@ class Signal():
 		Initialises flags that determine whether or not a certain function has run already.
 		"""
 		self.num_samples = num_samples
-		self.num_signals = self.num_samples // 2 + 1
+		self.num_signals = self.num_samples // 2
 		self.samples = [0] * num_samples
 		self.duration = duration
 		self.time = []
@@ -117,6 +117,8 @@ class Signal():
 		Performs a band-stop filter on the magnitudes of the frequencies based on a lower limit and an upper limit.
 		"""
 		if self.DFT_flag:
+			lower_limit = int(lower_limit * self.duration)
+			upper_limit = int(upper_limit * self.duration)
 			if (
 				lower_limit <= upper_limit
 				and 0 <= lower_limit < self.num_signals
@@ -147,15 +149,17 @@ class Signal():
 		"""
 		if self.DFT_flag:
 			frequencies = list(range(self.num_signals))
+			for frequency in frequencies:
+				frequencies[frequency] /= self.duration
 			fig, axes = plt.subplots(2, 1)
 			fig.suptitle("Magnitude and Phase plots of the DFT")
 			sns.lineplot(ax=axes[0], x=frequencies, y=self.mag)
 			axes[0].set_title("Magnitude")
-			axes[0].set_xlabel("Time [s]")
+			axes[0].set_xlabel("Frequency [Hz]")
 			axes[0].set_ylabel("Magnitude [-]")
 			sns.lineplot(ax=axes[1], x=frequencies, y=self.phase)
 			axes[1].set_title("Phase")
-			axes[1].set_xlabel("Time [s]")
+			axes[1].set_xlabel("Frequency [Hz]")
 			axes[1].set_ylabel("Phase [rad]")
 			plt.show()
 		else:

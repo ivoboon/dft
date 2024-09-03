@@ -3,7 +3,7 @@ import spectral
 def main():
 		# Initialised the Signal class
 		num_samples = 1000
-		signal = spectral.Signal(num_samples, 1)
+		signal = spectral.Signal(num_samples, 2)
 
 		# Constructs a signal
 		signal.add_shift(1)
@@ -14,8 +14,14 @@ def main():
 		# Performs DFT
 		signal.DFT()
 
+		# Plot frequencies and phases
+		signal.plot_DFT()
+
 		# Applies a band-stop filter
-		signal.band_stop_filter(10, 500)
+		signal.band_stop_filter(10, 249.5)
+
+		# Plot frequencies again
+		signal.plot_DFT()
 
 		# Performs IDFT
 		signal.IDFT()
